@@ -398,10 +398,6 @@ class PhoneCommon(orm.AbstractModel):
     def click2dial(self, cr, uid, erp_number, context=None):
         res = super(PhoneCommon, self).click2dial(
             cr, uid, erp_number, context=context)
-        if not erp_number:
-            raise orm.except_orm(
-                _('Error:'),
-                _('Missing phone number'))
 
         user, ast_server, ast_manager = \
             self.pool['asterisk.server']._connect_to_asterisk(

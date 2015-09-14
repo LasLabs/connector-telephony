@@ -50,9 +50,6 @@ class PhoneCommon(models.AbstractModel):
     @api.model
     def click2dial(self, erp_number):
         res = super(PhoneCommon, self).click2dial(erp_number)
-        if not erp_number:
-            raise Warning(
-                _('Missing phone number'))
 
         user = self.env.user
         if not user.ovh_billing_number:

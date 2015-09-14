@@ -213,6 +213,8 @@ class PhoneCommon(models.AbstractModel):
     def click2dial(self, cr, uid, erp_number, context=None):
         '''This function is designed to be overridden in IPBX-specific
         modules, such as asterisk_click2dial or ovh_telephony_connector'''
+        if not erp_number:
+            raise Warning(_('Missing phone number'))
         return {'dialed_number': erp_number}
 
     @api.model
