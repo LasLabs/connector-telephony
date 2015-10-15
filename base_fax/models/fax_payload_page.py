@@ -30,7 +30,7 @@ class FaxPayloadPage(models.Model):
         for rec in self:
             rec.image_xlarge = tools.image_resize_image_big(rec.image)
             rec.image_large = tools.image_resize_image(
-                rec.image, (256,256), 'base64', None, True
+                rec.image, (384,384), 'base64', None, True
             )
             rec.image_medium = tools.image_resize_image_medium(rec.image)
 
@@ -51,7 +51,7 @@ class FaxPayloadPage(models.Model):
         attachment=True,
     )
     image_large = fields.Binary(
-        string='Large Image (256x256)',
+        string='Large Image (384x384)',
         compute='_compute_images',
         readonly=True,
         store=True,
