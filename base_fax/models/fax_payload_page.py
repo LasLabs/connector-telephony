@@ -18,14 +18,21 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
-from PIL import Image, ImageSequence
-from io import BytesIO
+from openerp import models, fields, api, tools
 
 
 class FaxPayloadPage(models.Model):
     _name = 'fax.payload.page'
     _description = 'Fax Payload Page'
+
+    @api.depends('image')
+    def _compute_images(self):
+        for rec in self:
+            rec.image_xlarge = tools.image_resize_image_big(rec.image)
+            rec.image_large = tools.image_resize_image(
+                rec.image, (256,256), 'base64', None, True
+            )
+            rec.image_medium = tools.image_resize_image_medium(rec.image)
 
     name = fields.Char(
         help='Name of image'
@@ -35,6 +42,27 @@ class FaxPayloadPage(models.Model):
         attachment=True,
         # readonly=True,
         required=True,
+    )
+    image_xlarge = fields.Binary(
+        string='XLarge Image (1024x1024)',
+        compute='_compute_images',
+        readonly=True,
+        store=True,
+        attachment=True,
+    )
+    image_large = fields.Binary(
+        string='Large Image (256x256)',
+        compute='_compute_images',
+        readonly=True,
+        store=True,
+        attachment=True,
+    )
+    image_medium = fields.Binary(
+        string='Medium Image (128x128)',
+        compute='_compute_images',
+        readonly=True,
+        store=True,
+        attachment=True,
     )
     payload_id = fields.Many2one(
         'fax.payload',
